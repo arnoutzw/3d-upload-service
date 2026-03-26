@@ -1,0 +1,49 @@
+{
+  "name": "3D Upload Service",
+  "short_name": "3D Upload",
+  "description": "Upload STL/STEP/3MF files for instant 3D printing quotation with material & filament selection",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./index.html",
+      "accept": {
+        "model/3mf": [".3mf"],
+        "model/stl": [".stl"],
+        "model/step": [".step", ".stp"],
+        "model/obj": [".obj"],
+        "text/plain": [".dxf"]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "./index.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "file",
+          "accept": [".3mf", ".stl", ".step", ".stp", ".obj", ".dxf", "model/3mf", "model/stl", "model/step"]
+        }
+      ]
+    }
+  },
+  "categories": ["utilities"],
+  "lang": "en"
+}
