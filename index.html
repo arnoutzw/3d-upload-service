@@ -582,12 +582,17 @@
       <span id="quote-total" class="text-2xl font-mono font-bold text-amber-500">--</span>
     </div>
     <div class="text-[9px] font-mono text-zinc-600">Excl. shipping &middot; Prices indicative</div>
+    <!-- Agree with quote -->
+    <button id="quote-agree-btn" class="w-full mt-2 flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-zinc-300 font-mono font-bold text-xs px-3 py-2 rounded-lg transition-colors cursor-pointer">
+      <svg id="quote-agree-icon" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+      <span id="quote-agree-label">Agree with Quote</span>
+    </button>
     <!-- Action buttons -->
     <div class="flex gap-2 mt-2">
       <button id="quote-email-btn" class="quote-action-btn flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-mono font-bold text-xs px-3 py-2 rounded-lg transition-colors cursor-pointer border border-zinc-600">
         Email
       </button>
-      <button id="quote-add-to-cart-btn" class="quote-action-btn flex-1 bg-amber-500 hover:bg-amber-400 text-zinc-900 font-mono font-bold text-xs px-3 py-2 rounded-lg transition-colors cursor-pointer">
+      <button id="quote-add-to-cart-btn" class="quote-action-btn flex-1 bg-amber-500 hover:bg-amber-400 text-zinc-900 font-mono font-bold text-xs px-3 py-2 rounded-lg transition-colors cursor-pointer opacity-40 cursor-not-allowed" disabled>
         Add to Cart
       </button>
     </div>
@@ -4392,6 +4397,33 @@ const quoteInfillVal = document.getElementById('quote-infill-val');
 const quoteInfillType = document.getElementById('quote-infill-type');
 const quoteEmailBtn = document.getElementById('quote-email-btn');
 const quoteAddToCartBtn = document.getElementById('quote-add-to-cart-btn');
+const quoteAgreeBtn = document.getElementById('quote-agree-btn');
+const quoteAgreeIcon = document.getElementById('quote-agree-icon');
+const quoteAgreeLabel = document.getElementById('quote-agree-label');
+let quoteAgreed = false;
+
+function setQuoteAgreed(agreed) {
+  quoteAgreed = agreed;
+  if (agreed) {
+    quoteAgreeBtn.classList.remove('bg-zinc-800','hover:bg-zinc-700','border-zinc-600','text-zinc-300');
+    quoteAgreeBtn.classList.add('bg-green-900/40','border-green-600','text-green-400');
+    quoteAgreeIcon.innerHTML = '<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>';
+    quoteAgreeLabel.textContent = 'Quote Agreed';
+    quoteAddToCartBtn.disabled = false;
+    quoteAddToCartBtn.classList.remove('opacity-40','cursor-not-allowed');
+    quoteAddToCartBtn.classList.add('hover:bg-amber-400');
+  } else {
+    quoteAgreeBtn.classList.add('bg-zinc-800','hover:bg-zinc-700','border-zinc-600','text-zinc-300');
+    quoteAgreeBtn.classList.remove('bg-green-900/40','border-green-600','text-green-400');
+    quoteAgreeIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="3"/>';
+    quoteAgreeLabel.textContent = 'Agree with Quote';
+    quoteAddToCartBtn.disabled = true;
+    quoteAddToCartBtn.classList.add('opacity-40','cursor-not-allowed');
+    quoteAddToCartBtn.classList.remove('hover:bg-amber-400');
+  }
+}
+
+if (quoteAgreeBtn) quoteAgreeBtn.onclick = () => setQuoteAgreed(!quoteAgreed);
 
 async function loadPricingConfig() {
   if (!galleryDb) return;
@@ -4521,6 +4553,7 @@ function applyQuoteColorToModel(hex) {
 function updateQuotePanel() {
   if (!isQuoteMode || !pricingConfig || !quotePanel) return;
   if (!plates.length) return;
+  setQuoteAgreed(false);
 
   // Gather all meshes from active plate
   const meshes = [];
