@@ -917,8 +917,8 @@ if (isEmbedMode) {
   document.body.style.background = 'transparent';
 }
 
-// ─── Quote Mode (param: mode=quote) ───
-const isQuoteMode = new URLSearchParams(window.location.search).get('mode') === 'quote';
+// ─── Quote Mode — always on for 3d-upload-service; suppress with ?mode=view ───
+const isQuoteMode = new URLSearchParams(window.location.search).get('mode') !== 'view';
 let pricingConfig = null;
 let selectedQuoteMaterial = null;
 let selectedQuoteColor = null;
